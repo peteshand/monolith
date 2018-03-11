@@ -1,6 +1,5 @@
 package mantle.services.p2p;
 
-import mantle.util.signals.Signal;
 import flash.events.NetStatusEvent;
 import flash.events.SecurityErrorEvent;
 import flash.net.NetConnection;
@@ -8,7 +7,7 @@ import flash.net.GroupSpecifier;
 import flash.net.NetGroup;
 
 /**
- * ...
+ * @author P.J.Shand
  * @author Thomas Byrne
  */
 class PeerConnection

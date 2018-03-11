@@ -1,10 +1,8 @@
 package mantle.notifier;
-import mantle.util.signals.Signal;
-#if air
+
 import mantle.util.fs.DocStore;
-#end
 import mantle.util.ds.WeakMap;
-import mantle.util.signals.Signal.Signal0;
+import msignal.Signal.Signal0;
 
 /**
  * A Notifier adds a "change" signal to a value.
@@ -15,20 +13,15 @@ import mantle.util.signals.Signal.Signal0;
  * @author P.J.Shand
  * @author Thomas Byrne
  */
+@:forward(add, addOnce, addWithPriority, addOnceWithPriority, remove, removeAll, dispatch)
 abstract Notifier<T>(BaseNotifier<T>)
 {
 	
 	// Implicit Casting
 	
-	#if air
 	public inline function new(?value:T, ?id:String) {
 		this = new BaseNotifier(value, id);
 	}
-	#else
-	public inline function new(?value:T) {
-		this = new BaseNotifier(value);
-	}
-	#end
 	
 	
 	/**
@@ -66,7 +59,7 @@ abstract Notifier<T>(BaseNotifier<T>)
 	{
 		var bind:PropBind = bindings.get(this);
 		if (bind == null){
-			bind = new PropBind(this, "value", this.change);
+			bind = new PropBind(this, "value", this);
 			bindings.set(this, bind);
 		}
 		bind.add(target, targetProp);
@@ -100,12 +93,12 @@ abstract Notifier<T>(BaseNotifier<T>)
 		return this.requireChange = value;
 	}
 	
-	public var change(get, never):Signal0;
+	//public var change(get, never):Signal0;
 	public var value(get, set):Null<T>;
-	inline function get_change():Signal0 
-	{
-		return this.change;
-	}
+	//inline function get_change():Signal0 
+	//{
+		//return this.change;
+	//}
 	inline function get_value():Null<T> 
 	{
 		return this == null ? null : this.value;
@@ -327,7 +320,7 @@ abstract Notifier<T>(BaseNotifier<T>)
 /**
  * Underlying runtime object
  */
-class BaseNotifier<T>
+class BaseNotifier<T> extends Signal0 
 {
 	public var requireChange:Bool = true;
 	private var _value:T;
@@ -336,34 +329,28 @@ class BaseNotifier<T>
 	private var actions:Array<T->T>;
 	
 	public var value(get, set):Null<T>;
-	public var change:Signal0;
+	//public var change:Signal0;
 	
-	#if air
 	public var sharedObject:DocStore;
 	
 	public function new(?v:T, ?id:String) 
 	{
-		change = new Signal0();
+		//change = new Signal0();
 		_value = v;
 		if (id != null) {
 			sharedObject = DocStore.getLocal("Notifier_" + id);
 			var localData:Null<T> = untyped Reflect.getProperty(sharedObject.data, "value");
 			if (localData != null) _value = localData;
-			change.add(SaveDataLocally);
+			this.add(SaveDataLocally);
 		}
+		super();
 	}
 	function SaveDataLocally() 
 	{
 		sharedObject.setProperty("value", this.value);
 		sharedObject.flush();
 	}
-	#else
-	public function new(?v:T) 
-	{
-		change = new Signal0();
-		_value = v;
-	}
-	#end
+	
 	
 	
 	function toString():String
@@ -391,7 +378,7 @@ class BaseNotifier<T>
 		if (_value != null && _setHandlers != null) {
 			for(handler in _setHandlers) handler(_value);
 		}
-		change.dispatch();
+		this.dispatch();
 		return v;
 	}
 	

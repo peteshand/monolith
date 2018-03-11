@@ -1,6 +1,6 @@
 package mantle.managers.startup;
 
-import mantle.time.Delay;
+import mantle.delay.Delay;
 import mantle.managers.resize.Resize;
 import openfl.Assets;
 import openfl.display.Bitmap;
@@ -46,7 +46,7 @@ class Splash
 		bitmap.y = bitmap.height / -2;
 		
 		new Resize(stage);
-		Resize.onResize.add(OnResize);
+		Resize.add(OnResize);
 		OnResize();
 		
 		Delay.byFrames(60, Clear);
@@ -58,7 +58,7 @@ class Splash
 		if (container.parent != null) container.parent.removeChild(container);
 		if (bitmap.parent != null) bitmap.parent.removeChild(bitmap);
 		bmd.dispose();
-		Resize.onResize.remove(OnResize);
+		Resize.remove(OnResize);
 	}
 	
 	static private function OnResize() 

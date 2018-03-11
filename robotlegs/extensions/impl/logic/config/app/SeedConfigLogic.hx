@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.logic.config.app;
 import mantle.definitions.Storage;
 
-#if (flash && !test_flash)
+#if (air && !mobile && !test_flash)
 import mantle.util.fs.File;
 import mantle.util.fs.FileMode;
 import mantle.util.fs.FileStream;
@@ -33,14 +33,14 @@ class SeedConfigLogic
 	{
 		seedJson = Assets.getText("config/" + ConfigSettings.FILE_NAME_LOCAL_SEED + ".json");
 		
-		#if (flash && !test_flash)
+		#if (air && !mobile)
 		copySeedToAppConfigfile();
 		#end
 		
 		loadConfigSeed();
 	}
 	
-	#if (flash && !test_flash)
+	#if (air && !mobile && !test_flash)
 	function copySeedToAppConfigfile() 
 	{
 		// for reference only

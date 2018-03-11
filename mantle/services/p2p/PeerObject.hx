@@ -1,8 +1,6 @@
 package mantle.services.p2p;
 
-import mantle.time.Delay;
-import mantle.util.time.Timer;
-import mantle.util.time.EnterFrame;
+import mantle.delay.Delay;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.NetStatusEvent;
@@ -10,10 +8,11 @@ import flash.events.SecurityErrorEvent;
 import flash.net.GroupSpecifier;
 import flash.net.NetConnection;
 import flash.net.NetGroup;
+import mantle.time.EnterFrame;
 import msignal.Signal;
 
 /**
- * ...
+ * @author P.J.Shand
  * @author Thomas Byrne
  */
 class PeerObject

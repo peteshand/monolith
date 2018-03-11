@@ -2,7 +2,7 @@ package mantle.services.p2p;
 import flash.events.NetStatusEvent;
 
 /**
- * ...
+ * @author P.J.Shand
  * @author Thomas Byrne
  */
 class StratumPeerObject extends PeerObject
@@ -13,7 +13,7 @@ class StratumPeerObject extends PeerObject
 	{
 		if (registered) return;
 		registered = true;
-		haxe.remoting.AMFConnection.registerClassAlias("com.imagination.air.p2p.StratumPeerObject.UpperMsg", UpperMsg);
+		haxe.remoting.AMFConnection.registerClassAlias("air.p2p.StratumPeerObject.UpperMsg", UpperMsg);
 	}
 	
 	public var preventMsgForwarding:Bool = false;

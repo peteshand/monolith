@@ -1,12 +1,11 @@
 package robotlegs.extensions.impl.commands.keyboard;
+import mantle.keyboard.Key;
+import mantle.keyboard.Keyboard;
 import mantle.util.app.App;
 import mantle.time.GlobalTime;
 import openfl.display.StageDisplayState;
-import openfl.ui.Keyboard;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
-
-import robotlegs.extensions.api.services.keyboard.IKeyboardMap;
 using Logger;
 
 /**
@@ -16,33 +15,32 @@ using Logger;
 class BaseKeyCommand extends Command 
 {
 	@inject public var contextView:ContextView;
-	@inject public var keyboardMap:IKeyboardMap;
 	//@inject public var configModel:CoreConfigModel;
 	
 	public function new() { }
 	
 	override public function execute():Void
 	{
-		keyboardMap.map(App.exit, Keyboard.Q, { ctrl:true } );
+		Keyboard.onPress(Key.Q, App.exit ).ctrl(true);
 		
 		// Fullscreen is done on a per platform basis within platform-specific commands
-		//keyboardMap.map(GoFullScreen, Keyboard.F, { ctrl:true } );
-		keyboardMap.map(TimeOffset, Keyboard.MINUS, { shift:true, alt:true, params:[-1000] } );
-		keyboardMap.map(TimeOffset, Keyboard.EQUAL, { shift:true, alt:true, params:[1000] } );
-		keyboardMap.map(PausePlayback, Keyboard.NUMBER_8, { shift:true, alt:true, params:[false] } );
-		keyboardMap.map(PausePlayback, Keyboard.NUMBER_9, { shift:true, alt:true, params:[true] } );
+		//Keyboard.onPress(GoFullScreen, Key.F, { ctrl:true } );
+		Keyboard.onPress(Key.MINUS, TimeOffset, [-1000] ).shift(true).alt(true);
+		Keyboard.onPress(Key.EQUAL, TimeOffset, [1000] ).shift(true).alt(true);
+		Keyboard.onPress(Key.NUMBER_8, PausePlayback, [false] ).shift(true).alt(true);
+		Keyboard.onPress(Key.NUMBER_9, PausePlayback, [true] ).shift(true).alt(true);
 		
-		keyboardMap.map(ResetTimeOffset, Keyboard.NUMBER_0, { shift:true, alt:true } );
+		Keyboard.onPress(Key.NUMBER_0, ResetTimeOffset).shift(true).alt(true);
 		
 		#if (debug && starling)
-			keyboardMap.map(RefreshContext, Keyboard.C, { alt:true, ctrl:true, shift:true } );
+			Keyboard.onPress(Key.C, RefreshContext).ctrl(true).shift(true).alt(true);
 			
-			//keyboardMap.map(SaveToConfig, Keyboard.S, { alt:true, ctrl:true, shift:true } );
-			//keyboardMap.map(SaveLocationToConfig, Keyboard.A, { alt:true, ctrl:true, shift:true } );
+			//Keyboard.onPress(Key.S, SaveToConfig).ctrl(true).shift(true).alt(true);
+			//Keyboard.onPress(Key.A, SaveLocationToConfig).ctrl(true).shift(true).alt(true);
 			
 		#end
 		
-		keyboardMap.map(TestCriticalError, Keyboard.Q, { alt:true, ctrl:true, shift:true } );
+		Keyboard.onPress(Key.Q, TestCriticalError ).ctrl(true).shift(true).alt(true);
 	}
 	
 	function TestCriticalError() 

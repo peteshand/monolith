@@ -1,6 +1,7 @@
 package robotlegs.extensions.impl.services.config;
+
 import mantle.definitions.Storage;
-import mantle.time.Delay;
+import mantle.delay.Delay;
 import mantle.util.app.App;
 import mantle.util.fs.FileTools;
 import mantle.util.fs.Files;
@@ -32,10 +33,11 @@ class ConfigSaveService
 	//@inject public var configModel:IConfigModel;
 	
 	public function new() { 
+		
 		//configFile = File.documentsDirectory.resolvePath("imagination/" + App.getAppId() + "/config/" + ConfigSettings.FILE_NAME_LOCAL + ".json");
 	}	
 	
-	#if flash
+	#if (air && !mobile)
 	/*public function saveCombinedToLocal() 
 	{
 		var configData:ConfigData = configModel.configSummary.combinedConfigData;

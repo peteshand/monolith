@@ -11,8 +11,6 @@ class Storage
 	@:isVar public static var configSeedDirectory(default, null):File;
 	
 	@:isVar public static var appStorageDir(default, null):File;
-	@:isVar public static var globalDirectory(default, null):File;
-	@:isVar public static var globalConfigDirectory(default, null):File;
 	
 	@:isVar public static var appDirectory(default, null):File;
 	@:isVar public static var configDirectory(default, null):File;
@@ -29,14 +27,8 @@ class Storage
 		#if flash
 			configSeedDirectory = File.applicationDirectory.resolvePath("config");
 			
-			appStorageDir = File.documentsDirectory.resolvePath("appStorage");
+			appStorageDir = File.documentsDirectory.resolvePath(".appStorage");
 			if (!appStorageDir.exists) appStorageDir.createDirectory();
-			
-			globalDirectory = appStorageDir.resolvePath("global");
-			if (!globalDirectory.exists) globalDirectory.createDirectory();
-			
-			globalConfigDirectory = globalDirectory.resolvePath("config");
-			if (!globalConfigDirectory.exists) globalConfigDirectory.createDirectory();
 			
 			appDirectory = appStorageDir.resolvePath(App.getAppId());
 			if (!appDirectory.exists) appDirectory.createDirectory();

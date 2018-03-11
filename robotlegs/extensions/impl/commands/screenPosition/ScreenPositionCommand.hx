@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.commands.screenPosition;
 
-import mantle.time.Delay;
+import mantle.delay.Delay;
 import flash.desktop.NativeApplication;
 import flash.display.NativeWindow;
 import flash.display.NativeWindowDisplayState;

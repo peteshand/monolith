@@ -4,7 +4,8 @@ import robotlegs.extensions.impl.commands.alwaysOnTop.AlwaysOnTopCommand;
 import robotlegs.extensions.impl.commands.fullscreen.AirFullscreenCommand;
 import robotlegs.extensions.impl.commands.screenPosition.ScreenPositionCommand;
 import robotlegs.extensions.impl.commands.ExecuteImagCommands;
-import robotlegs.extensions.impl.signals.startup.ConfigReadySignal;
+import robotlegs.extensions.impl.signals.startup.InitializeAppSignal;
+//import robotlegs.extensions.impl.signals.startup.ConfigReadySignal;
 import robotlegs.bender.framework.api.IConfig;
 
 /**
@@ -23,9 +24,9 @@ class ExecuteFlashImagCommands extends ExecuteImagCommands implements IConfig
 	override public function configure():Void
 	{
 		//commandMap.map(InitializeAppSignal).toCommand(ReplayCommand).once();
-		commandMap.map(ConfigReadySignal).toCommand(AirFullscreenCommand).once();
-		commandMap.map(ConfigReadySignal).toCommand(ScreenPositionCommand).once();
-		commandMap.map(ConfigReadySignal).toCommand(AlwaysOnTopCommand).once();
+		commandMap.map(InitializeAppSignal).toCommand(AirFullscreenCommand).once();
+		commandMap.map(InitializeAppSignal).toCommand(ScreenPositionCommand).once();
+		commandMap.map(InitializeAppSignal).toCommand(AlwaysOnTopCommand).once();
 		
 		super.configure();
 	}

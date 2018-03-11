@@ -1,6 +1,5 @@
 package mantle.services.watch.watcher;
-import mantle.util.signals.Signal;
-import mantle.util.signals.Signal.Signal1;
+
 import mantle.util.fs.File;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;

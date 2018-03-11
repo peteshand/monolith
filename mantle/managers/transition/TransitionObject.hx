@@ -1,8 +1,9 @@
 package mantle.managers.transition;
 
+import mantle.managers.transition.TransitionObject.Target;
 import mantle.managers.transition.TransitionSettings;
-import mantle.managers.transition.plugins.TransitionPlugins;
-import mantle.managers.transition.plugins.TransitionPlugins.Plugin;
+//import mantle.managers.transition.plugins.TransitionPlugins;
+//import mantle.managers.transition.plugins.TransitionPlugins.Plugin;
 import motion.easing.Expo;
 import motion.easing.IEasing;
 import motion.easing.Quad;
@@ -31,7 +32,7 @@ class TransitionObject implements ITransitionObject
 	
 	private var optionProperties:Array<String>;
 	private var properties:Dynamic = {};
-	var visSetter:Bool->Bool;
+	var visSetter:Dynamic;
 	public var option:TransitionSettings = {};
 	public var onSet = new Signal0();
 	
@@ -65,12 +66,12 @@ class TransitionObject implements ITransitionObject
 		return set(properties, option);
 	}
 	
-	public function autoVisible(value:Bool):ITransitionObject
-	{
-		option.autoVisible = value;
-		UpdateAutoVis();
-		return set(properties, option);
-	}
+	//public function autoVisible(value:Bool):ITransitionObject
+	//{
+		//option.autoVisible = value;
+		//UpdateAutoVis();
+		//return set(properties, option);
+	//}
 	
 	public function autoVisObject(value:Dynamic):ITransitionObject
 	{
@@ -104,7 +105,7 @@ class TransitionObject implements ITransitionObject
 		if (option.start == null) option.start = 0;
 		if (option.end == null) option.end = 1;
 		if (option.startHidden == null) option.startHidden = true;
-		if (option.autoVisible == null) option.autoVisible = false;
+		//if (option.autoVisible == null) option.autoVisible = false;
 		if (option.autoVisObject == null) option.autoVisObject = target;
 	}
 	
@@ -114,9 +115,9 @@ class TransitionObject implements ITransitionObject
 		setDefault(option);
 		if (_properties != null) properties = _properties;
 		
-		if (_properties == null) {
-			option.autoVisible = true;
-		}
+		//if (_properties == null) {
+			//option.autoVisible = true;
+		//}
 		
 		var propertiesToAddfields = Reflect.fields (_properties);
 		for (property in propertiesToAddfields)
@@ -156,14 +157,15 @@ class TransitionObject implements ITransitionObject
 			var value:Array<Dynamic> = Reflect.getProperty(_properties, property);
 			var _hasSetter = hasSetter(target, property);
 			var setter:Float -> Void;
-			var plugin:Plugin = TransitionPlugins.getPlugin(property);
+			//var plugin:Plugin = TransitionPlugins.getPlugin(property);
 			if (_hasSetter){
 				var innerSetter:Float->Void = untyped target["set_" + property];
-				setter = plugin.setter(target, property, innerSetter, option);
+				setter = getSetter(target, property, innerSetter, option);
 			}else{
-				setter = plugin.prop(target, property, option);
+				setter = getProp(target, property, option);
 			}
 			transitionPropsMap.set(property, { value:value, setter:setter } );
+			
 		}
 		
 		UpdateAutoVis();
@@ -173,20 +175,25 @@ class TransitionObject implements ITransitionObject
 	
 	function UpdateAutoVis() 
 	{
-		try {
-			visSetter = untyped option.autoVisObject["set_visible"];
-		} catch( e : Dynamic ) try {
-			visSetter = function(value:Bool):Bool { return option.autoVisObject.visible = value; };
+		var _hasSetter = hasSetter(option.autoVisObject, "visible");
+		if (_hasSetter){
+			var innerSetter:Bool->Void = untyped target["set_visible"];
+			visSetter = getSetter(target, "visible", innerSetter, option);
+		}else {
+			var hasProp:Bool = hasSetter(option.autoVisObject, "visible", "");
+			if (hasProp){
+				visSetter = getProp(target, "visible", option);
+			}
 		}
 	}
 	
-	function hasSetter(obj:Dynamic, value:String):Bool /*untyped*/
+	function hasSetter(obj:Dynamic, value:String, prefix:String="set_"):Bool
 	{
 		#if flash
-		return Reflect.hasField(obj, "set_" + value);
+		return Reflect.hasField(obj, prefix + value);
 		#else
 		try {
-			untyped obj["set_" + value];
+			untyped obj[prefix + value];
 			return true;
 		} catch( e : Dynamic ) try {
 			return false;
@@ -270,16 +277,17 @@ class TransitionObject implements ITransitionObject
 			#else
 				Reflect.setProperty(target, key, value);
 			#end
+			
+			if (visSetter != null && key == "alpha") {
+				if (value == 0) {
+					visSetter(false);
+				}
+				else {
+					visSetter(true);
+				}
+			}
 		}
 		
-		if (option.autoVisible) {
-			if (value <= -1 || value >= 1) {
-				visSetter(false);
-			}
-			else {
-				visSetter(true);
-			}
-		}
 	}
 	
 	public function showBegin():Void 
@@ -300,6 +308,36 @@ class TransitionObject implements ITransitionObject
 	public function hideEnd():Void 
 	{
 		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	public function getProp(target:Dynamic, prop:String, option:TransitionSettings) : Dynamic->Void
+	{
+		return applyProp.bind(target, prop, _);
+	}
+	public function getSetter(target:Dynamic, prop:String, innerSetter:Dynamic->Void, option:TransitionSettings) : Dynamic->Void
+	{
+		return applySetter.bind(target, innerSetter, _);
+	}
+	
+	public function applyProp(target:Dynamic, prop:String, value:Dynamic) 
+	{
+		untyped target[prop] = value;
+	}
+	
+	public function applySetter(target:Dynamic, innerSetter:Dynamic->Void, value:Dynamic) 
+	{
+		#if !js
+			innerSetter(value);
+		#else
+			untyped innerSetter.call(target, Math.round(value));
+		#end
 	}
 }
 

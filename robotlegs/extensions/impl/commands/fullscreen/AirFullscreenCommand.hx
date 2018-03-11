@@ -1,15 +1,15 @@
 package robotlegs.extensions.impl.commands.fullscreen;
 
-import mantle.time.Delay;
+import mantle.keyboard.Key;
+import mantle.keyboard.Keyboard;
+import mantle.delay.Delay;
 import flash.display.DisplayObject;
 import flash.display.StageDisplayState;
 import flash.events.MouseEvent;
 import openfl.errors.Error;
-import openfl.ui.Keyboard;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.extensions.api.model.config.IConfigModel;
-import robotlegs.extensions.api.services.keyboard.IKeyboardMap;
 	
 /**
  * ...
@@ -21,7 +21,6 @@ class AirFullscreenCommand extends Command
 {
 	@inject public var contextView:ContextView;
 	@inject("optional=true") public var configModel:IConfigModel;
-	@inject public var keyboardMap:IKeyboardMap;
 	
 	private var coolingDown:Bool = false;
 	private var coolDownCount:Int = 150;
@@ -35,8 +34,8 @@ class AirFullscreenCommand extends Command
 			GoFullScreen();
 		}
 		attachTo(contextView.view.stage);
-		keyboardMap.map(ToggleFullscreen, Keyboard.F, { ctrl:true } );
-		keyboardMap.map(ToggleFullscreen, Keyboard.ENTER, { alt:true } );
+		Keyboard.onPress(Key.F, ToggleFullscreen).ctrl(true);
+		Keyboard.onPress(Key.ENTER, ToggleFullscreen).ctrl(true);
 	}
 	
 	private function attachTo(displayObject:DisplayObject):Void
@@ -46,18 +45,12 @@ class AirFullscreenCommand extends Command
 		}
 		else if (configModel.fullscreenOnInit) {
 			GoFullScreen();
-			Delay.byFrames(5, GoFullScreen);
 			displayObject.addEventListener(MouseEvent.DOUBLE_CLICK, OnDoubleClickFullscreen);
 		}
 		else {
 			displayObject.addEventListener(MouseEvent.DOUBLE_CLICK, OnDoubleClickToggle);
 		}
 	}
-	
-	/*private function ResetStageSize():Void 
-	{
-		ExitFullScreen();
-	}*/
 	
 	private function ToggleFullscreen():Void 
 	{

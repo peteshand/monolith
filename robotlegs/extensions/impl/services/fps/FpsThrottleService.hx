@@ -34,14 +34,14 @@ class FpsThrottleService
 	public function start():Void
 	{
 		_running = true;
-		activityModel.inactiveTime.change.add(OnInactiveTimeChange);
+		activityModel.inactiveTime.add(OnInactiveTimeChange);
 		OnInactiveTimeChange();
 	}
 	
 	public function stop():Void
 	{
 		_running = false;
-		activityModel.inactiveTime.change.remove(OnInactiveTimeChange);
+		activityModel.inactiveTime.remove(OnInactiveTimeChange);
 		
 	}
 	

@@ -14,18 +14,19 @@ import flash.events.Event;
  */
 class EnterFrame
 {
-	private static var callbacks = new Array<Void->Void>();
+	private static var callbacks:Array<Void->Void>;
 	private static var running:Notifier<Bool>;
+	static private var application:Application;
 	
 	static function __init__() 
 	{
+		callbacks = new Array<Void->Void>();
 		running = new Notifier<Bool>(false);
-		running.change.add(OnRunningChange);
+		running.add(OnRunningChange);
 	}
 	
 	static function OnRunningChange() 
 	{
-		trace("running.value = " + running.value);
 		if (running.value) {
 			#if flash
 				Lib.current.stage.addEventListener(Event.ENTER_FRAME, Update);
@@ -47,22 +48,24 @@ class EnterFrame
 	} 
 	#end
 	
-	private static inline function OnTick():Void
+	private static function OnTick():Void
 	{
-		//trace("OnTick");
 		for (i in 0...callbacks.length) 
 		{
 			callbacks[i]();
 		}
 		
 		#if (!flash)
-			if (running.value) Timer.delay(OnTick, Std.int(1000 / Application.current.frameRate));
+			application = Application.current;
+			if (running.value) {
+				if (application != null) Timer.delay(OnTick, Std.int(1000 / application.frameRate));
+				else Timer.delay(OnTick, Std.int(1000 / 60));
+			}
 		#end
 	}
 	
 	static public function add(callback:Void->Void):Void 
 	{
-		trace("add");
 		running.value = true;
 		callbacks.push(callback);
 	}

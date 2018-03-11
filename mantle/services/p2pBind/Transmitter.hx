@@ -15,7 +15,7 @@ class Transmitter
 		this.id = id;
 		this.notifier = notifier;
 		P2P.neighborConnect.add(OnNeighborConnect);
-		notifier.change.add(SetCurrentValue);
+		notifier.add(SetCurrentValue);
 	}
 	
 	function OnNeighborConnect(neighborId:String) 
@@ -35,6 +35,6 @@ class Transmitter
 		notifier = null;
 		id = null;
 		P2P.neighborConnect.remove(OnNeighborConnect);
-		notifier.change.remove(SetCurrentValue);
+		notifier.remove(SetCurrentValue);
 	}
 }

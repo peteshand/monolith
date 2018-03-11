@@ -1,6 +1,6 @@
 package mantle.util.ds;
 import mantle.util.ds.ArraySortAsync.SortPart;
-import mantle.util.time.EnterFrame;
+import remove.util.time.EnterFrame;
 
 /**
  * ...

@@ -5,7 +5,7 @@ import flash.filesystem.File;
 import haxe.crypto.Md5;
 import mantle.util.log.ILogHandler;
 import mantle.util.log.LogFormatImpl;
-import mantle.worker.WorkerSwitchboard;
+//import remove.worker.WorkerSwitchboard;
 
 using Logger;
 
@@ -15,7 +15,7 @@ using Logger;
  */
 class SimpleJsonLogger implements ILogHandler
 {
-	private var workerSwitch:WorkerSwitchboard;
+	//private var workerSwitch:WorkerSwitchboard;
 	
 	private var dir:String;
 	private var fileExt:String;
@@ -28,11 +28,11 @@ class SimpleJsonLogger implements ILogHandler
 		this.dir = dir;
 		this.fileExt = fileExt;
 		
-		if (viaWorker) {
-			workerSwitch = WorkerSwitchboard.getWorker();
-		}else {
-			workerSwitch = WorkerSwitchboard.getInstance();
-		}
+		//if (viaWorker) {
+			//workerSwitch = WorkerSwitchboard.getWorker();
+		//}else {
+			//workerSwitch = WorkerSwitchboard.getInstance();
+		//}
 		
 		var dirFile:File = new File(dir);
 		if (dirFile.exists && !dirFile.isDirectory){

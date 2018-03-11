@@ -1,6 +1,6 @@
 package mantle.util.app;
 import mantle.util.window.AppWindows;
-import mantle.time.Delay;
+import mantle.delay.Delay;
 import mantle.util.window.AppWindows.AppWindow;
 
 #if openfl

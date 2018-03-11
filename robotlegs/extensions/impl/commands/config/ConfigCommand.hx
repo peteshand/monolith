@@ -1,14 +1,13 @@
 package robotlegs.extensions.impl.commands.config;
 
 
-import mantle.time.Delay;
+import mantle.delay.Delay;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.logic.config.app.SeedConfigLogic;
 import robotlegs.extensions.impl.logic.flags.compile.CompileDefineFlagsLogic;
 
-#if (flash && !test_flash)
-	import mantle.logic.unexpectedExit.UnexpectedExitLogic;
+#if (air && !mobile)
 	import robotlegs.extensions.impl.logic.flags.app.AppFlagsLogic;
 	import robotlegs.extensions.impl.logic.config.app.DynamicConfigLogic;
 	import robotlegs.extensions.impl.logic.config.app.SaveActiveConfigLogic;
@@ -21,7 +20,7 @@ import robotlegs.extensions.impl.logic.flags.compile.CompileDefineFlagsLogic;
 	import robotlegs.extensions.impl.logic.config.html.QueryConfigLogic;
 #end
 
-import robotlegs.extensions.impl.signals.startup.ConfigReadySignal;
+//import robotlegs.extensions.impl.signals.startup.ConfigReadySignal;
 
 /**
  * ...
@@ -32,17 +31,16 @@ import robotlegs.extensions.impl.signals.startup.ConfigReadySignal;
 class ConfigCommand extends Command 
 {
 	@inject public var configModel:IConfigModel;
-	@inject public var configReadySignal:ConfigReadySignal;
+	//@inject public var configReadySignal:ConfigReadySignal;
 	@inject public var seedConfigLogic:SeedConfigLogic;
 	
 	@inject public var compileDefineFlagsLogic:CompileDefineFlagsLogic;
-	#if (flash && !test_flash)
+	#if (air && !mobile)
 		@inject public var appFlagsLogic:AppFlagsLogic;
 		@inject public var dynamicConfigLogic:DynamicConfigLogic;
 		@inject public var staticConfigLogic:StaticConfigLogic;
 		@inject public var saveActiveConfigLogic:SaveActiveConfigLogic;
 		@inject public var commandLineArgsConfigLogic:CommandLineArgsConfigLogic;
-		@inject public var unexpectedExitLogic:UnexpectedExitLogic;
 	#elseif (html5 && !electron)
 		@inject public var htmlFlagsLogic:HtmlFlagsLogic;
 		@inject public var htmlDynamicConfigLogic:HtmlDynamicConfigLogic;
@@ -54,20 +52,19 @@ class ConfigCommand extends Command
 	
 	override public function execute():Void
 	{
-		/*#if (flash && !test_flash)
+		/*#if (air && !mobile)
 			configSaveService.copyGlobalSeed();
 		#end*/
 		
 		compileDefineFlagsLogic.init();
 		
-		#if (flash && !test_flash)
+		#if (air && !mobile)
 			appFlagsLogic.init();
-			unexpectedExitLogic.init();
 		#end
 		
 		seedConfigLogic.init();
 		
-		#if (flash && !test_flash)
+		#if (air && !mobile)
 			staticConfigLogic.init();
 			dynamicConfigLogic.init();
 			commandLineArgsConfigLogic.init();
@@ -95,6 +92,6 @@ class ConfigCommand extends Command
 	
 	function Proceed() 
 	{
-		configReadySignal.dispatch();
+		//configReadySignal.dispatch();
 	}
 }

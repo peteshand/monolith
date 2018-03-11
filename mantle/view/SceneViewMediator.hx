@@ -1,6 +1,7 @@
 package mantle.view;
-import mantle.managers.state.StateManager;
-import mantle.time.Delay;
+import mantle.managers.state.IState;
+import mantle.managers.state.State;
+import mantle.delay.Delay;
 import robotlegs.bender.bundles.mvcs.Mediator;
 import robotlegs.bender.extensions.mediatorMap.api.IMediatorMap;
 
@@ -12,22 +13,22 @@ class SceneViewMediator extends Mediator
 {
 	@inject public var view:ISceneView;
 	@inject public var mediatorMap:IMediatorMap;
-	private var stateManager:StateManager;
+	private var state:IState;
 	
 	public function new() { }	
 	
 	override public function initialize():Void
 	{
-		addStateManager();
+		addState();
 	}
 	
-	function addStateManager() 
+	function addState() 
 	{
-		if (view.transition == null) Delay.nextFrame(addStateManager);
+		if (view.transition == null) Delay.nextFrame(addState);
 		else {
-			stateManager = view.state;
-			stateManager.attachTransition(view.transition);
-			var active:Bool = stateManager.check();
+			state = view.state;
+			state.attachTransition(view.transition);
+			var active:Bool = state.check();
 			if (active) {
 				view.transition.value = -1;
 				view.transition.Show();
@@ -37,9 +38,8 @@ class SceneViewMediator extends Mediator
 	
 	override public function destroy():Void
 	{
-		if (stateManager != null){
-			stateManager.removeTransition(view.transition);
-			stateManager.dispose();
+		if (state != null){
+			state.removeTransition(view.transition);
 		}
 	}
 }

@@ -2,7 +2,6 @@ package mantle.model.scene;
 
 import mantle.managers.transition.Transition;
 import mantle.notifier.Notifier;
-import mantle.util.signals.Signal;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 /**
  * ...
@@ -60,7 +59,7 @@ class SceneModel extends BaseNotifier<String>
 			}
 			if (updateHistory) _history.push(v);
 			activityModel.animating();
-			change.dispatch();
+			this.dispatch();
 		}
 		return v;
 	}
@@ -84,8 +83,8 @@ class SceneModel extends BaseNotifier<String>
 	{
 		queuedUpdateHistory = updateHistory;
 		queueValue = value;
-		Transition.globalTransitioning.change.removeAll();
-		Transition.globalTransitioning.change.addOnce(OnTransitionChange);
+		Transition.globalTransitioning.removeAll();
+		Transition.globalTransitioning.addOnce(OnTransitionChange);
 	}
 	
 	private function OnTransitionChange():Void 

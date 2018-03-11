@@ -1,13 +1,13 @@
 package mantle.util.window;
-import mantle.util.signals.Signal;
+
 import mantle.notifier.Notifier;
-import mantle.util.signals.Signal.Signal1;
-import mantle.util.signals.Signal.Signal2;
 import mantle.util.window.JsAppWindows.JsAppWindow;
 import js.Browser;
 import js.Lib;
 import js.html.Event;
 import js.html.Window;
+import msignal.Signal.Signal1;
+import msignal.Signal.Signal2;
 
 /**
  * ...
@@ -157,9 +157,9 @@ class JsAppWindow
 			window.addEventListener("blur", onHide);
 		}
 		
-		visible.change.add(onVisibleChange);
-		focused.change.add(onFocusedChange);
-		title.change.add(onTitleChange);
+		visible.add(onVisibleChange);
+		focused.add(onFocusedChange);
+		title.add(onTitleChange);
 	}
 	
 	function onVisibleChange() 

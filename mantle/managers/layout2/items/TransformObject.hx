@@ -8,7 +8,7 @@ import mantle.managers.layout2.settings.LayoutSettings;
 import mantle.managers.layout2.settings.LayoutScale;
 import mantle.managers.layout2.LayoutManager;
 import mantle.managers.resize.Resize;
-import mantle.time.Delay;
+import mantle.delay.Delay;
 import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 import openfl.geom.Transform;
@@ -106,8 +106,8 @@ class TransformObject implements ITransformObject implements IInternetTransformO
 			transformationMatrix = layoutContainer.transform;
 		}
 		
-		Resize.onResize.remove(OnStageResize);
-		Resize.onResize.add(OnStageResize);
+		Resize.remove(OnStageResize);
+		Resize.add(OnStageResize);
 		
 		TriggerResize();
 	}
@@ -486,7 +486,7 @@ class TransformObject implements ITransformObject implements IInternetTransformO
 	
 	public function dispose() 
 	{
-		Resize.onResize.remove(OnStageResize);
+		Resize.remove(OnStageResize);
 	}
 	
 	public function resize():ITransformObject

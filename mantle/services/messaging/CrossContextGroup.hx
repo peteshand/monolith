@@ -10,33 +10,33 @@ import openfl.events.EventDispatcher;
  * @author pjshand
  */
 @:internal
-class CrossContextGroup<Type1>
+class CrossContextGroup<T>
 {
 	public var groupID:String;
-	private var signal = new Signal1<Type1>();
-	public var valueClasses(get, set):Type1;
+	private var signal = new Signal1<T>();
+	public var valueClasses(get, set):T;
 	
 	public function new(groupID:String)
 	{
 		this.groupID = groupID;
 	}
 	
-	public function add(listener:Type1->Void):Void
+	public function add(listener:T->Void):Void
 	{
 		signal.add(listener);
 	}
 	
-	public function addOnce(listener:Type1->Void):Void
+	public function addOnce(listener:T->Void):Void
 	{
 		signal.addOnce(listener);
 	}
 	
-	public function dispatch(value:Type1):Void
+	public function dispatch(value:T):Void
 	{
 		signal.dispatch(value);
 	}
 	
-	public function remove(listener:Type1->Void):Void
+	public function remove(listener:T->Void):Void
 	{
 		signal.remove(listener);
 	}
@@ -46,12 +46,12 @@ class CrossContextGroup<Type1>
 		signal.removeAll();
 	}
 	
-	public function get_valueClasses():Type1
+	public function get_valueClasses():T
 	{
 		return cast signal.valueClasses;
 	}
 	
-	public function set_valueClasses(value:Type1):Type1
+	public function set_valueClasses(value:T):T
 	{
 		signal.valueClasses = cast value;
 		return value;

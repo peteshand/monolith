@@ -1,5 +1,7 @@
 package mantle.managers.initialize;
-import mantle.managers.state.StateManager;
+
+import mantle.managers.state.IState;
+import mantle.managers.state.State;
 
 /**
  * ...
@@ -12,8 +14,8 @@ class InitializeManager
 		
 	}
 	
-	public static function define(parent:Dynamic, view:Class<Dynamic>, stateManager:StateManager, params:Array<Dynamic>=null):DefinitionObject 
+	public static function define(parent:Dynamic, view:Class<Dynamic>, state:IState, params:Array<Dynamic>=null):DefinitionObject 
 	{
-		return new DefinitionObject(parent, view, stateManager, params);
+		return new DefinitionObject(parent, view, state, params);
 	}
 }

@@ -5,7 +5,7 @@ import mantle.util.log.ILogHandler;
 import mantle.util.log.LogFormatImpl;
 import mantle.util.log.LogFormatter;
 import mantle.time.GlobalTime;
-import mantle.worker.WorkerSwitchboard;
+//import remove.worker.WorkerSwitchboard;
 import flash.Lib;
 import flash.filesystem.File;
 import haxe.Timer;
@@ -27,7 +27,7 @@ class HtmlFileLogger implements ILogHandler
 	private var targetFileCount:Int = 0;
 	//private var fileStream:FileStream;
 	
-	private var workerSwitch:WorkerSwitchboard;
+	//private var workerSwitch:WorkerSwitchboard;
 	
 	private var logContent:String = "";
 	private var newline:String = "\r\n";
@@ -55,11 +55,11 @@ class HtmlFileLogger implements ILogHandler
 		this.formatter = (formatter == null ? LogFormatImpl.htmlFormat : formatter);
 		this.doDelay = viaWorker;
 		
-		if (viaWorker) {
-			workerSwitch = WorkerSwitchboard.getWorker();
-		}else {
-			workerSwitch = WorkerSwitchboard.getInstance();
-		}
+		//if (viaWorker) {
+			//workerSwitch = WorkerSwitchboard.getWorker();
+		//}else {
+			//workerSwitch = WorkerSwitchboard.getInstance();
+		//}
 		
 		var dirFile:File = new File(dir);
 		if (!dirFile.exists) {

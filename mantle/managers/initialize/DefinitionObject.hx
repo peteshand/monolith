@@ -1,6 +1,7 @@
 package mantle.managers.initialize;
 
-import mantle.managers.state.StateManager;
+import mantle.managers.state.IState;
+import mantle.managers.state.State;
 import msignal.Signal.Signal0;
 
 /**
@@ -12,23 +13,23 @@ class DefinitionObject
 {
 	var parent:Dynamic;
 	var ViewClass:Class<Dynamic>;
-	var stateManager:StateManager;
+	var state:IState;
 	var params:Array<Dynamic>;
 	var onActive:Signal0;
 	
-	public function new(parent:Dynamic, ViewClass:Class<Dynamic>, stateManager:StateManager, params:Array<Dynamic>=null) 
+	public function new(parent:Dynamic, ViewClass:Class<Dynamic>, state:IState, params:Array<Dynamic>=null) 
 	{
 		this.parent = parent;
 		this.ViewClass = ViewClass;
-		this.stateManager = stateManager;
+		this.state = state;
 		this.params = params;
 		if (this.params == null) {
 			this.params = [];
 		}
 		
-		onActive = Reflect.getProperty(stateManager, "onActive");
+		onActive = Reflect.getProperty(state, "onActive");
 		onActive.addOnce(initialize);
-		var result:Bool = stateManager.check();
+		var result:Bool = state.check();
 		if (result) {
 			onActive.remove(initialize);
 			initialize();

@@ -1,5 +1,6 @@
 package robotlegs.extensions.impl.logic.config.app;
 
+#if (air && !mobile)
 import mantle.definitions.Storage;
 import mantle.util.fs.File;
 import mantle.util.fs.FileMode;
@@ -28,7 +29,7 @@ class StaticConfigLogic
 	
 	public function init() 
 	{
-		#if (flash && !test_flash)
+		#if (air && !mobile)
 		var file:File = Storage.configDirectory.resolvePath(ConfigSettings.FILE_NAME_STATIC + ".json");
 		if (!file.exists) {
 			createEmptyConfigOverride(file);
@@ -52,3 +53,5 @@ typedef EmptyConfig =
 {
 	props:Dynamic
 }
+
+#end

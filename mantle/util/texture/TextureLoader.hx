@@ -1,6 +1,6 @@
 package mantle.util.texture;
-import core.utils.TextureLoader.TextureLoaderInstance;
-import flash.utils.ByteArray;
+
+import openfl.utils.ByteArray;
 import openfl.display.Bitmap;
 import openfl.display.Loader;
 import openfl.display3D.Context3DTextureFormat;

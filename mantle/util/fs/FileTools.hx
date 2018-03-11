@@ -13,7 +13,7 @@ import mantle.util.EventListenerTracker;
  * ...
  * @author Thomas Byrne
  */
-#if flash
+#if (air && !mobile)
 
 	import flash.filesystem.File as FlFile;
 	import flash.filesystem.FileStream;

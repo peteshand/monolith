@@ -1,7 +1,5 @@
 package robotlegs.extensions.impl.commands.stageSetup;
 
-import mantle.managers.layout.anchor.AnchorManager;
-import mantle.managers.layout.scale.ScaleManager;
 import mantle.managers.layout2.LayoutManager;
 import mantle.managers.resize.Resize;
 import flash.display.Stage;
@@ -33,8 +31,8 @@ class StageSetupCommand extends Command
 		
 		#if starling
 		mantle.managers.layout2.LayoutManager.stage = stage;
-		mantle.managers.layout.anchor.AnchorManager.stage = stage;
-		mantle.managers.layout.scale.ScaleManager.stage = stage;
+		//mantle.managers.layout.anchor.AnchorManager.stage = stage;
+		//mantle.managers.layout.scale.ScaleManager.stage = stage;
 		#end
 		
 		new Resize(stage);

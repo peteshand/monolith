@@ -4,20 +4,20 @@ package mantle.services.messaging;
  * ...
  * @author Pete Shand
  */
-class CrossContext<Type1>
+class CrossContext<T>
 {
-	private static var messengerObjects = new Map<String, CrossContextGroup<Type1>>();
-	public var messenger:CrossContextGroup<Type1>;
+	private static var messengerObjects = new Map<String, CrossContextGroup<T>>();
+	public var messenger:CrossContextGroup<T>;
 	
 	public function new(groupID:String) 
 	{
 		messenger = getMessengerObject(groupID);
 	}
 	
-	private function getMessengerObject(groupID:String):CrossContextGroup<Type1>
+	private function getMessengerObject(groupID:String):CrossContextGroup<T>
 	{
 		if (messengerObjects.exists(groupID) == false) {
-			var crossContextGroup = new CrossContextGroup<Type1>(groupID);
+			var crossContextGroup = new CrossContextGroup<T>(groupID);
 			messengerObjects.set(groupID, crossContextGroup);
 		}
 		return messengerObjects.get(groupID);

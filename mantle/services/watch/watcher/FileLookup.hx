@@ -1,8 +1,6 @@
 package mantle.services.watch.watcher;
-import mantle.util.signals.Signal;
 
-import mantle.time.Delay;
-import mantle.util.signals.Signal.Signal1;
+import mantle.delay.Delay;
 import flash.events.Event;
 import flash.events.FileListEvent;
 import flash.filesystem.File;

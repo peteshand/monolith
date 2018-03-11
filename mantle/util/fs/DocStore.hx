@@ -1,4 +1,6 @@
 package mantle.util.fs;
+
+#if (air&&!mobile)
 import mantle.definitions.Storage;
 import mantle.util.fs.File;
 import mantle.util.fs.FileMode;
@@ -18,6 +20,7 @@ class DocStore
 
 	function new(id:String) 
 	{
+		
 		this.id = id;
 		var docStoreDir:File = Storage.appDirectory.resolvePath("DocStore");
 		if (!docStoreDir.exists) docStoreDir.createDirectory();
@@ -56,3 +59,8 @@ class DocStore
 		if (file.exists) file.deleteFile();
 	}
 }
+
+#else
+	import openfl.net.SharedObject;
+	typedef DocStore = SharedObject;
+#end

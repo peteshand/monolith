@@ -5,7 +5,6 @@ import mantle.time.EnterFrame;
 import haxe.ds.ObjectMap;
 import msignal.Signal.Signal1;
 import msignal.Signal.Signal2;
-import robotlegs.extensions.imag.impl.services.parse.data.ParseObject;
 /**
  * ...
  * @author P.J.Shand
@@ -39,7 +38,7 @@ class MapNotifier<T>
 		EnterFrame.add(OnTick);
 	}
 	
-	function OnTick(delta:Int) 
+	function OnTick() 
 	{
 		check();
 	}

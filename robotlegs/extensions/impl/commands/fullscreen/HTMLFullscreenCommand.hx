@@ -59,15 +59,15 @@ class HTMLFullscreenCommand extends Command
 		contextView.view.stage.nativeWindow.activate();
 		contextView.view.stage.nativeWindow.alwaysInFront = true;
 		return;*/
-		trace("GoFullScreen");
+		//trace("GoFullScreen");
 		
 		//Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 		
 		//contextView.view.stage.displayState = StageDisplayState.FULL_SCREEN;
 		
 		#if js
-			var js = Assets.getText("js/Fullscreen.js");
-			Lib.eval(js);
+			//var js = Assets.getText("js/Fullscreen.js");
+			//Lib.eval(js);
 		#end
 		
 		//untyped js;

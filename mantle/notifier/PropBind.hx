@@ -1,5 +1,5 @@
 package mantle.notifier;
-import mantle.util.signals.Signal;
+import msignal.Signal.Signal0;
 
 using Logger;
 /**

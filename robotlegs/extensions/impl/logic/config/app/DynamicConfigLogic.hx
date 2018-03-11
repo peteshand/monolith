@@ -1,4 +1,6 @@
 package robotlegs.extensions.impl.logic.config.app;
+
+#if (air && !mobile)
 import robotlegs.extensions.impl.logic.config.app.StaticConfigLogic;
 import mantle.definitions.Storage;
 import mantle.util.fs.File;
@@ -30,15 +32,13 @@ class DynamicConfigLogic
 	
 	public function init() 
 	{
-		#if (flash && !test_flash)
+		#if (air && !mobile)
 		var file:File = Storage.configDirectory.resolvePath(ConfigSettings.FILE_NAME_DYNAMIC + ".json");
 		if (!file.exists) {
 			createEmptyDynamic(file);
 		}
-		loadDynamicData(file, false);
-		loadDynamicData(Storage.globalConfigDirectory.resolvePath(ConfigSettings.FILE_NAME_DYNAMIC + ".json"), true);
+		loadDynamicData(file);
 		configModel.onLocalDynamicSet.add(OnLocalDynamicSet);
-		configModel.onGlobalDynamicSet.add(OnGlobalDynamicSet);
 		#end
 	}
 	
@@ -52,8 +52,8 @@ class DynamicConfigLogic
 		fileStream.close();
 	}
 	
-	#if (flash && !test_flash)
-	function loadDynamicData(file:File, global:Bool) 
+	#if (air && !mobile)
+	function loadDynamicData(file:File) 
 	{
 		if (!file.exists) return;
 		
@@ -65,7 +65,7 @@ class DynamicConfigLogic
 			var data:PropsData = Json.parse(dataStr);
 			if (data.props != null) {
 				for (key in Reflect.fields(data.props)){
-					configModel.set(key, Reflect.field(data.props, key), global);
+					configModel.set(key, Reflect.field(data.props, key));
 				}
 			}
 		}
@@ -77,11 +77,6 @@ class DynamicConfigLogic
 	function OnLocalDynamicSet() 
 	{
 		saveDynamicData(configModel.localDynamicData, Storage.configDirectory.resolvePath(ConfigSettings.FILE_NAME_DYNAMIC + ".json"));
-	}
-	
-	function OnGlobalDynamicSet() 
-	{
-		saveDynamicData(configModel.globalDynamicData, Storage.globalConfigDirectory.resolvePath(ConfigSettings.FILE_NAME_DYNAMIC + ".json"));
 	}
 	
 	function saveDynamicData(dynamicData:Map<String, Dynamic>, saveLocation:File) 
@@ -105,3 +100,4 @@ typedef PropsData =
 {
 	props:{}
 }
+#end

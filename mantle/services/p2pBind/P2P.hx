@@ -45,10 +45,10 @@ class P2P
 		key = new Notifier<String>("9d665927ed29017b901d0c6c-2978dd023407");
 		idAddress = new Notifier<String>(null);
 		
-		groupID.change.add(UpdateConnection);
-		type.change.add(UpdateConnection);
-		key.change.add(UpdateConnection);
-		idAddress.change.add(UpdateConnection);
+		groupID.add(UpdateConnection);
+		type.add(UpdateConnection);
+		key.add(UpdateConnection);
+		idAddress.add(UpdateConnection);
 		UpdateConnection();
 		
 		/*groupID = "DefaultID";

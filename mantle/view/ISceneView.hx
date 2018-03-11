@@ -1,6 +1,6 @@
 package mantle.view;
 
-import mantle.managers.state.StateManager;
+import mantle.managers.state.IState;
 import mantle.managers.transition.Transition;
 
 /**
@@ -9,5 +9,5 @@ import mantle.managers.transition.Transition;
 interface ISceneView
 {
 	var transition:Transition;
-	var state:StateManager;
+	var state:IState;
 }

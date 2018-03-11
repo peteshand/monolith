@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.services.timeout;
 
 import mantle.notifier.Notifier;
-import mantle.time.Delay;
+import mantle.delay.Delay;
 import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
@@ -33,8 +33,8 @@ class TimeoutService
 	public function start():Void
 	{
 		_running = true;
-		activityModel.inactiveTime.change.add(OnInactiveTimeChange);
-		activityModel.animationTime.change.add(OnInactiveTimeChange);
+		activityModel.inactiveTime.add(OnInactiveTimeChange);
+		activityModel.animationTime.add(OnInactiveTimeChange);
 		timeoutModel.change.add(OnTimedOutChange);
 		OnTimedOutChange();
 	}
@@ -42,8 +42,8 @@ class TimeoutService
 	public function stop():Void
 	{
 		_running = false;
-		activityModel.inactiveTime.change.remove(OnInactiveTimeChange);
-		activityModel.animationTime.change.add(OnInactiveTimeChange);
+		activityModel.inactiveTime.remove(OnInactiveTimeChange);
+		activityModel.animationTime.add(OnInactiveTimeChange);
 		timeoutModel.change.remove(OnTimedOutChange);
 	}
 	

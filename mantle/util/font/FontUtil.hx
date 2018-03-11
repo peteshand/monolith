@@ -25,11 +25,7 @@ class FontUtil
         var xml:Xml = Xml.parse(Assets.getText(xmlPath)).firstElement();
 		
         var bitmapFont = new BitmapFont(texture, xml);
-		#if starling2
-			TextField.registerCompositor(bitmapFont, bitmapFont.name);
-		#else
-			TextField.registerBitmapFont(bitmapFont, bitmapFont.name);
-		#end
+		TextField.registerCompositor(bitmapFont, bitmapFont.name);
 		return bitmapFont;
 	}
 	

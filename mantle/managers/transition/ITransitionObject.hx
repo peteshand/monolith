@@ -8,7 +8,7 @@ interface ITransitionObject
 {
 	function showEase(ease:IEasing):ITransitionObject;
 	function hideEase(ease:IEasing):ITransitionObject;
-	function autoVisible(value:Bool):ITransitionObject;
+	//function autoVisible(value:Bool):ITransitionObject;
 	function autoVisObject(object:Dynamic):ITransitionObject;
 	function ease(ease:IEasing):ITransitionObject;
 	function start(value:Float):ITransitionObject;

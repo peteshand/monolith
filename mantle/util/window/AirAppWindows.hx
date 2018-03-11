@@ -1,12 +1,7 @@
 package mantle.util.window;
-import mantle.util.signals.Signal;
 import mantle.notifier.Notifier;
 import mantle.util.app.App;
 import mantle.util.app.AppExit;
-import mantle.util.geom.Point;
-import mantle.util.signals.Signal.Signal0;
-import mantle.util.signals.Signal.Signal1;
-import mantle.util.signals.Signal.Signal2;
 import flash.desktop.NativeApplication;
 import flash.display.NativeWindow;
 import flash.display.NativeWindowInitOptions;
@@ -15,6 +10,9 @@ import flash.display.NativeWindowSystemChrome;
 import flash.events.NativeWindowBoundsEvent;
 import flash.events.NativeWindowDisplayStateEvent;
 import flash.display.NativeWindowDisplayState;
+import msignal.Signal.Signal0;
+import msignal.Signal.Signal1;
+import msignal.Signal.Signal2;
 import openfl.display.Stage;
 import openfl.events.Event;
 
@@ -163,10 +161,10 @@ class AirAppWindow
 		title.value = window.title;
 		alwaysInFront.value= window.alwaysInFront;
 		
-		focused.change.add(onFocusedChanged);
-		visible.change.add(onVisibleChanged);
-		title.change.add(onTitleChanged);
-		alwaysInFront.change.add(onAlwaysInFrontChanged);
+		focused.add(onFocusedChanged);
+		visible.add(onVisibleChanged);
+		title.add(onTitleChanged);
+		alwaysInFront.add(onAlwaysInFrontChanged);
 		
 		onWindowStateChange();
 	}

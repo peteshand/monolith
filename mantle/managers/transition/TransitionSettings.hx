@@ -11,7 +11,7 @@ typedef TransitionSettings =
 {
 	?showEase:IEasing,
 	?hideEase:IEasing,
-	?autoVisible:Bool,
+	//?autoVisible:Bool,
 	?autoVisObject:AutoVisObject,
 	?ease:IEasing,
 	?start:Float,

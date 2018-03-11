@@ -1,6 +1,6 @@
 package mantle.util.network;
 import mantle.notifier.Notifier;
-import mantle.util.time.Timer;
+import remove.util.time.Timer;
 import flash.events.Event;
 import mloader.Http;
 

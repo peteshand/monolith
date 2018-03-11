@@ -1,4 +1,6 @@
 package robotlegs.extensions.impl.logic.flags.app;
+
+#if (air && !mobile)
 import mantle.definitions.Storage;
 import mantle.util.fs.File;
 import mantle.util.fs.FileMode;
@@ -70,3 +72,5 @@ typedef FlagsData =
 {
 	flags:Dynamic
 }
+
+#end

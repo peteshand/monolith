@@ -104,12 +104,12 @@ class App
 	
 	static private function onWindowRemove(window:AppWindow) 
 	{
-		window.focused.change.add(onWindowFocusChanged);
+		window.focused.add(onWindowFocusChanged);
 		onWindowFocusChanged();
 	}
 	static private function onWindowAdd(window:AppWindow) 
 	{
-		window.focused.change.add(onWindowFocusChanged);
+		window.focused.add(onWindowFocusChanged);
 		if (window.focused.value) focused.value = true;
 	}
 	

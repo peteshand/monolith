@@ -1,19 +1,19 @@
 package mantle.managers.transition;
 
-import mantle.managers.transition.plugins.TransitionPlugins;
+//import mantle.managers.transition.plugins.TransitionPlugins;
 import mantle.notifier.Notifier;
-import mantle.time.Delay;
+import mantle.delay.Delay;
 import motion.Actuate;
 import motion.actuators.GenericActuator;
 import motion.easing.Linear;
-import mantle.util.signals.Signal;
+import msignal.Signal.Signal0;
 import openfl.errors.Error;
 
 /**
  * ...
  * @author P.J.Shand
  */
-class Transition extends BaseNotifier<Null<Float>>
+class Transition
 {
 	public var showTime:Float = 1;
 	public var showDelay:Float = 0;
@@ -56,9 +56,10 @@ class Transition extends BaseNotifier<Null<Float>>
 	//private var _value:Null<Float>;
 	//public var value(get, set):Float;
 	
-	
+	var progress:BaseNotifier<Null<Float>>;
 	var target:Dynamic;
 	var tween:GenericActuator<Transition>;
+	@:isVar public var value(get, set):Float = 0;
 	
 	//public var state = new Notifier<String>(null);
 	
@@ -68,10 +69,9 @@ class Transition extends BaseNotifier<Null<Float>>
 	static public inline var HIDE:String = "hide";
 	// --------------------------------------------------- //
 	
-	public function new(showTime:Float=1, hideTime:Float=1, showDelay:Float=0, hideDelay:Float=0,startHidden:Bool=true) 
+	public function new(showTime:Float = 1, hideTime:Float = 1, showDelay:Float = 0, hideDelay:Float = 0, startHidden:Bool = true) 
 	{
-		TransitionPlugins.installStandard();
-		
+		//TransitionPlugins.installStandard();
 		this.showTime = showTime;
 		this.hideTime = hideTime;
 		this.showDelay = showDelay;
@@ -82,10 +82,30 @@ class Transition extends BaseNotifier<Null<Float>>
 		//onShowUpdate.add(ActivityModel.animating);
 		//onHideUpdate.add(ActivityModel.animating);
 		
-		globalTweenCount.change.add(OnTweenCountChange);
-		isTweening.change.add(OnIsTweeningChange);
+		globalTweenCount.add(OnTweenCountChange);
+		isTweening.add(OnIsTweeningChange);
 		
-		super();
+		progress = new BaseNotifier<Null<Float>>(0);
+		progress.add(OnProgressChange);
+		if (startHidden) progress.value = -1;
+		else progress.value = 0;
+	}
+	
+	function OnProgressChange() 
+	{
+		if (value == 0) this.showing = true;
+		else if (value <= -1 || value >= 1) this.showing = false;
+		
+		if (value < -1) value = -1;
+		else if (value > 1) value = 1;
+		
+		if (transitionObjects == null) {
+			throw new Error("this transition object has been disposed and should not be referenced");
+		}
+		for (i in 0...transitionObjects.length)
+		{	
+			transitionObjects[i].update(value);
+		}
 	}
 	
 	function OnIsTweeningChange() 
@@ -124,14 +144,9 @@ class Transition extends BaseNotifier<Null<Float>>
 		transitionObject.onSet.add(UpdateStartValues);
 		transitionObject.set(properties, options);
 		
-		if (_value == null) {
-			if (startHidden) value = -1;
-			else value = 0;
-		}
-		else {
-			this.value = _value;
-		}
-		return cast transitionObject;
+		OnProgressChange();
+		
+		return transitionObject;
 	}
 	
 	private function UpdateStartValues() 
@@ -165,40 +180,6 @@ class Transition extends BaseNotifier<Null<Float>>
 		return transitionObject;
 	}
 	
-	override private function set_value(v:Null<Float>):Null<Float> 
-	{
-		if (_value == v && requireChange) return v;
-		if (_value != null && _unsetHandlers != null) {
-			for(handler in _unsetHandlers) handler(_value);
-		}
-		
-		///////////////////////////////////////////////////////
-		///////////////////////////////////////////////////////
-		_value = v;
-		if (_value == 0) this.showing = true;
-		else if (_value <= -1 || _value >= 1) this.showing = false;
-		
-		if (_value < -1) _value = -1;
-		else if (_value > 1) _value = 1;
-		
-		if (transitionObjects == null) {
-			throw new Error("this transition object has been disposed and should not be referenced");
-		}
-		for (i in 0...transitionObjects.length)
-		{	
-			transitionObjects[i].update(_value);
-		}
-		///////////////////////////////////////////////////////
-		///////////////////////////////////////////////////////
-		
-		if (_value != null && _setHandlers != null) {
-			for(handler in _setHandlers) handler(_value);
-		}
-		
-		change.dispatch();
-		return v;
-	}
-	
 	private function queue(func:Void->Void):Void 
 	{
 		queuedFunction = func;
@@ -221,7 +202,7 @@ class Transition extends BaseNotifier<Null<Float>>
 		}
 		showing = true;
 		
-		if(_value == 1) this.value = -1;
+		if(progress.value == 1) this.value = -1;
 		
 		KillDelays();
 		isTweening.value = true;
@@ -256,7 +237,7 @@ class Transition extends BaseNotifier<Null<Float>>
 	private function ShowJump():Void 
 	{
 		PrivateShowOnStart();
-		this.value = 0;
+		progress.value = 0;
 		PrivateShowOnUpdate();
 		PrivateShowOnComplete();
 	}
@@ -302,7 +283,7 @@ class Transition extends BaseNotifier<Null<Float>>
 			i--;
 		}
 		queuedFunction = null;
-		change.removeAll();
+		progress.removeAll();
 		onShowStart.removeAll();
 		onShowUpdate.removeAll();
 		onShowComplete.removeAll();
@@ -329,7 +310,7 @@ class Transition extends BaseNotifier<Null<Float>>
 	private function HideJump():Void 
 	{
 		PrivateHideOnStart();
-		this.value = 1;
+		progress.value = 1;
 		PrivateHideOnUpdate();
 		PrivateHideOnComplete();
 	}
@@ -401,5 +382,15 @@ class Transition extends BaseNotifier<Null<Float>>
 	function get_totalTransTime():Float 
 	{
 		return showDelay + showTime + hideDelay + hideTime;
+	}
+	
+	function get_value():Float 
+	{
+		return progress.value;
+	}
+	
+	function set_value(value:Float):Float 
+	{
+		return progress.value = value;
 	}
 }

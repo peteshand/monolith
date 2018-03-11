@@ -24,7 +24,7 @@ class ConfigLoadService
 		
 	}
 	
-	#if (flash && !test_flash)
+	#if (air && !mobile)
 	public function loadDynamicData(file:File) 
 	{
 		if (!file.exists) return;

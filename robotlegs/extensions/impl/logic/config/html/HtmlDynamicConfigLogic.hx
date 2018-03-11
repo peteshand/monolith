@@ -16,20 +16,16 @@ class HtmlDynamicConfigLogic
 {
 	@inject public var configModel:IConfigModel;
 	private var localSharedObject:SharedObject;
-	private var globalSharedObject:SharedObject;
 	
 	public function new() { }
 	
 	public function init() 
 	{
 		localSharedObject = SharedObject.getLocal("localHtmlDynamicConfigLogic");
-		globalSharedObject = SharedObject.getLocal("globalHtmlDynamicConfigLogic");
 		
 		loadDynamicData(configModel.localDynamicData, localSharedObject);
-		loadDynamicData(configModel.globalDynamicData, globalSharedObject);
 		
 		configModel.onLocalDynamicSet.add(OnLocalDynamicSet);
-		configModel.onGlobalDynamicSet.add(OnGlobalDynamicSet);
 	}
 	
 	function loadDynamicData(dynamicData:Map<String, Dynamic>, sharedObject:SharedObject) 
@@ -49,14 +45,5 @@ class HtmlDynamicConfigLogic
 			localSharedObject.setProperty(key, configModel.localDynamicData.get(key));
 		}
 		localSharedObject.flush();
-	}
-	
-	function OnGlobalDynamicSet() 
-	{
-		for (key in configModel.localDynamicData.keys()) 
-		{
-			globalSharedObject.setProperty(key, configModel.globalDynamicData.get(key));
-		}
-		globalSharedObject.flush();
 	}
 }

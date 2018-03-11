@@ -1,5 +1,6 @@
 package robotlegs.extensions.impl.commands.replay;
 
+#if (air && !mobile)
 import mantle.managers.replay.FrameActions;
 import mantle.managers.replay.InstantReplay;
 import mantle.managers.replay.InstantReplayObject;
@@ -72,3 +73,4 @@ class ReplayCommand extends Command
 		InstantReplay.play();
 	}
 }
+#end

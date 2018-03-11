@@ -29,10 +29,10 @@ class FullStageViewportCommand extends Command
 	
 	override public function execute():Void
 	{
-		if (configModel.fullWindowResize){
+		//if (configModel.fullWindowResize){
 			stage = contextView.view.stage;
-			Resize.onResize.add(OnStageResize);
-		}
+			Resize.add(OnStageResize);
+		//}
 	}
 	
 	private function OnStageResize():Void 
