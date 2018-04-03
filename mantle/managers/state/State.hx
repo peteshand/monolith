@@ -18,6 +18,7 @@ class State extends BaseNotifier<Bool> implements IState
 	public var onActive = new Signal0();
 	public var onInactive = new Signal0();
 	public var uris:Array<String> = [];
+	public var conditionPolicy:ConditionPolicy = ConditionPolicy.AND;
 	
 	public function new(_sceneModel:SceneModel=null) 
 	{
@@ -64,7 +65,7 @@ class State extends BaseNotifier<Bool> implements IState
 		else {
 			mapCondition(new Condition(notifier, value, operation), standardConsitions);
 		}
-		
+		check();
 	}
 	
 	public function removeCondition(notifier:Notifier<Dynamic>, value:Dynamic=null, operation:String=null):Void 
@@ -105,24 +106,46 @@ class State extends BaseNotifier<Bool> implements IState
 	
 	function OnConditionChange() 
 	{
-		var _value1:Bool = true;
-		for (i in 0...standardConsitions.length) 
-		{
-			if (standardConsitions[i].value == false) {
-				_value1 = false;
-				break;
-			}
-		}
-		
-		var _value2:Bool = false;
-		for (i in 0...sceneConditions.length) 
-		{
-			if (sceneConditions[i].value == true) {
-				_value2 = true;
-				break;
-			}
-		}
+		var _value1:Bool = checkWithPolicy(standardConsitions, conditionPolicy);
+		var _value2:Bool = checkWithPolicy(untyped sceneConditions, ConditionPolicy.SCENE);
+		if (sceneConditions.length == 0) _value2 = false;
 		this.value = _value1 && _value2;
+	}
+	
+	function checkWithPolicy(consitions:Array<Condition>, conditionPolicy:ConditionPolicy) 
+	{
+		if (consitions.length == 0) return true;
+		var _value:Bool;
+		if (conditionPolicy == ConditionPolicy.AND) {
+			_value = true;
+			for (i in 0...consitions.length) 
+			{
+				consitions[i].check();
+				if (consitions[i].value == false) {
+					_value = false;
+					break;
+				}
+			}
+		}
+		else {
+			_value = false;
+			for (i in 0...consitions.length) 
+			{
+				consitions[i].check();
+				if (consitions[i].value == true) {
+					_value = true;
+					if (conditionPolicy == ConditionPolicy.OR) break;
+				}
+				
+				if (conditionPolicy == ConditionPolicy.SCENE) {
+					if (consitions[i].value == false && consitions[i].operation == "!=") {
+						_value = false;
+						break;
+					}
+				}
+			}
+		}
+		return _value;
 	}
 	
 	public function dispose():Void
@@ -147,6 +170,7 @@ class State extends BaseNotifier<Bool> implements IState
 	public function clone():State
 	{
 		var _clone:State = new State(untyped sceneModel);
+		_clone.conditionPolicy = this.conditionPolicy;
 		for (i in 0...standardConsitions.length) {
 			_clone.addCondition(standardConsitions[i].notifier, standardConsitions[i].targetValue, standardConsitions[i].operation);
 		}

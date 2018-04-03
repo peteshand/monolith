@@ -10,6 +10,8 @@ import msignal.Signal.Signal0;
  */
 interface IState
 {
+	public var conditionPolicy:ConditionPolicy;
+	public var value(get, set):Null<Bool>;
 	public var onActive:Signal0;
 	public var onInactive:Signal0;
 	public function addURI(uri:String):Void;

@@ -5,7 +5,7 @@ import mantle.notifier.Notifier;
  * ...
  * @author P.J.Shand
  */
-class Condition extends BaseNotifier<Bool> /*implements ICondition*/
+class Condition extends BaseNotifier<Bool>
 {
 	public var notifier:Notifier<Dynamic>;
 	public var targetValue:Dynamic;
@@ -35,35 +35,6 @@ class Condition extends BaseNotifier<Bool> /*implements ICondition*/
 	
 	function getValue() 
 	{
-		//var _value:Bool = true;
-		//switch (operation) 
-		//{
-			//case "==":
-				////if (notifier.value != targetValue) {
-					////if (Std.is(targetValue, String)) {
-						////var s:String = untyped targetValue;
-						////var s2:String = cast(notifier.value, String);
-						////var i:Int = s.indexOf("*");
-						////if (i == -1 || s.substr(0, i - 1) == s2.substr(0, i - 1)) {
-							////return true;
-						////}
-					////}
-					////return false;
-				////}
-				//if (notifier.value == targetValue) return true;
-			//case "!=":
-				//if (notifier.value != targetValue) return true;
-			//case "<=":
-				//if (untyped notifier.value <= targetValue) return true;
-			//case "<":
-				//if (untyped notifier.value < targetValue) return true;
-			//case ">=":
-				//if (untyped notifier.value >= targetValue) return true;
-			//case ">":
-				//if (untyped notifier.value > targetValue) return true;
-			//default:
-		//}
-		
 		switch (operation) 
 		{
 			case "==":
